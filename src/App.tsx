@@ -34,10 +34,12 @@ const products: Product[] = [
 function App() {
   const [subTotal, setSubTotal] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
-  const [basketItems, setBasketItems] = useState(products);
+  const [basketItems, setBasketItems] = useState<BasketItem[]>();
 
-  /** When the page loads we want to iterate over the products and find out
-   * the quantity of each product based on the product id. */
+  /**
+   * When the page loads we want to iterate over the products and find out
+   * the quantity of each product based on the product id.
+   */
   useEffect(() => {
     const basket: BasketItem[] = [];
 
@@ -58,20 +60,41 @@ function App() {
     setDeliveryCost(5.99);
   }, []);
 
-  // const calculateProductQuantity = (products: Product[]) => {
-  //   return products.reduce((acc, product) => {
-  //     return acc + product.quantity;
-  //   }, 0);
-  // }
+  /**
+   * Recalculates the subtotal when the basket items change
+   */
+  useEffect(() => {
+    if (!basketItems) return;
+    const total = basketItems.reduce((acc, product) => {
+      return acc + product.price * product.quantity;
+    }, 0);
+    setSubTotal(total);
+  }, [basketItems]);
 
-  // const updateQuantity = (id: number, quantity: number) => { };
+  /**
+   * Updates the quantity of a given product in the basket
+   * The quantity cannot be reduced below 0
+   */
+  const updateQuantity = (id: number, quantity: number) => {
+    if (!basketItems) return;
+    const updatedBasket = basketItems.map((item) => {
+      if (item.id === id) {
+        const newQuantity = Math.max(item.quantity + quantity, 0);
+        return { ...item, quantity: newQuantity };
+      }
+      return item;
+    });
+    setBasketItems(updatedBasket);
+  };
 
   return (
     <>
-      <div className='bg-white p-6 rounded-lg'>
-        <ItemList products={basketItems} />
-        <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} />
-      </div>
+      {basketItems && (
+        <div className='bg-white p-6 rounded-lg'>
+          <ItemList products={basketItems} handleUpdateQuantity={updateQuantity} />
+          <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} />
+        </div>
+      )}
     </>
   );
 }
