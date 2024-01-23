@@ -58,15 +58,6 @@ function App() {
     setDeliveryCost(5.99);
   }, []);
 
-  // Calculate the total product cost and shipping on load.
-  // useEffect(() => {
-  //   const total = products.reduce((acc, product) => {
-  //     return acc + product.price;
-  //   }, 0);
-  //   setSubTotal(total);
-  //   setDeliveryCost(5.99);
-  // }, []);
-
   // const calculateProductQuantity = (products: Product[]) => {
   //   return products.reduce((acc, product) => {
   //     return acc + product.quantity;
@@ -77,7 +68,7 @@ function App() {
 
   return (
     <>
-      <div className="bg-white p-6 rounded-lg">
+      <div className='bg-white p-6 rounded-lg'>
         <ItemList products={basketItems} />
         <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} />
       </div>
