@@ -7,7 +7,8 @@ const BasketTotal = ({
 }) => {
   const basketTotal = productCost + deliveryCost;
   return (
-    <div className='mt-6 h-full rounded-lg border bg-white p-6 shadow-md mt-0'>
+    <div className='mt-6 h-full'>
+      <hr className='my-4 ' />
       <div className='mb-2 flex justify-between'>
         <p className='text-gray-700'>Subtotal</p>
         <p className='text-gray-700'>£{productCost}</p>
