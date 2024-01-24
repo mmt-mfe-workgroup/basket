@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import ItemList from './components/ItemList';
 import BasketTotal from './components/BasketTotal';
 import { Product, BasketItem } from './types/props.types';
+
+// @ts-ignore
+const RemoteButton = lazy(() => import('UI/Button'));
 import './App.css';
 
 const products: Product[] = [
@@ -87,11 +90,43 @@ function App() {
     setBasketItems(updatedBasket);
   };
 
+  /**
+   * Listen for the addToBasket event and the product to state
+   * when an event is received.
+   */
+  document.addEventListener('addToBasket', ((event: CustomEvent) => {
+    console.log('event', event);
+    if (!event.detail) return;
+
+    const { product } = event.detail;
+    const item = basketItems?.find((item) => item.id === product.id); 
+    debugger
+    if (item) {
+      item.quantity += 1;
+      setBasketItems([...basketItems]);
+    } else {
+      setBasketItems([...basketItems, { ...product, quantity: 1 }]);
+    }
+  }) as EventListener);
+
   return (
     <>
       {basketItems && (
         <div className='bg-white p-6 rounded-lg'>
           <ItemList products={basketItems} handleUpdateQuantity={updateQuantity} />
+
+          <div className='mt-4 mb-2 flex flex-col items-start'>
+            <p className='mb-4 text-gray-700'>Promo Code</p>
+            <div className='button-wrap flex'>
+              <Suspense fallback={<div>Loading...</div>}>
+                <RemoteButton
+                  label='Apply voucher'
+                  onClick={() => console.log('applying voucher...')}
+                />
+              </Suspense>
+            </div>
+          </div>
+
           <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} />
         </div>
       )}
