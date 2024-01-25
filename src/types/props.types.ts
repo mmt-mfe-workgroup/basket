@@ -1,13 +1,22 @@
 export interface Product {
   id: number;
-  name: string;
+  title: string;
   price: number;
-  title?: string;
   description?: string;
-  image: string;
-  size: string;
+  brand?: string;
+  category?: string;
+  thumbnail: string;
+  size?: string;
+  rating?: number;
+  stock?: number;
 }
 
 export type BasketItem = Product & {
   quantity: number;
 };
+
+export interface BasketEvent extends Event {
+  detail: {
+    product: BasketItem;
+  };
+}

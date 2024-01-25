@@ -12,10 +12,10 @@ const ItemList = ({ products, handleUpdateQuantity }: ItemListProps) => {
       <div>
         {products.map((product) => (
           <div className='flex mt-5' key={product.id}>
-            <img src={product.image} alt='product-image' className='w-full rounded-lg sm:w-40' />
+            <img src={product.thumbnail} alt='product-image' className='w-full rounded-lg sm:w-40' />
             <div className='ml-4 flex w-full justify-between text-left'>
               <div className='mt-2 mt-0'>
-                <h3 className='text-lg font-bold text-gray-900'>{product.name}</h3>
+                <h3 className='text-lg font-bold text-gray-900'>{product.title}</h3>
                 <p className='mt-1 text-xs text-gray-700'>Size: {product.size}</p>
                 <div className='flex items-center border-gray-100 mt-2'>
                   <span
