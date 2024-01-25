@@ -2,9 +2,9 @@
 
 A sample basket component that will run as a federated module.
 
-* CDN_LOCATION: `rude-clouds.surge.sh`
+* CDN_LOCATION: `unnatural-fog.surge.sh`
 * FRAMEWORK: `react@18.2`
-* COMPONENT: `Button`
+* COMPONENT: `Basket`
 
 ## Usage
 
