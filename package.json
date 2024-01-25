@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "deploy": "npm run build && cd dist && echo '*' > CORS && echo $npm_package_config_cdn | pbcopy && npx surge && cd ..",
+    "deploy-linux": "npm run build && cd dist && echo '*' > CORS && echo $npm_package_config_cdn | xclip -selection clipboard && npx surge && cd ..",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "config": {
-    "cdn": "unnatural-fog.surge.sh"
+    "cdn": "seemly-temper.surge.sh"
   },
   "dependencies": {
     "react": "^18.2.0",

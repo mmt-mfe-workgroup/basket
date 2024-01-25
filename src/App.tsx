@@ -100,12 +100,12 @@ function App() {
 
     const { product } = event.detail;
     const item = basketItems?.find((item) => item.id === product.id); 
-    debugger
+    
     if (item) {
-      item.quantity += 1;
-      setBasketItems([...basketItems]);
+      // item.quantity += 1;
+      // setBasketItems([...basketItems]);
     } else {
-      setBasketItems([...basketItems, { ...product, quantity: 1 }]);
+      // setBasketItems([...basketItems, { ...product, quantity: 1 }]);
     }
   }) as EventListener);
 
