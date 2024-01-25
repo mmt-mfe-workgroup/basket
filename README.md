@@ -2,7 +2,7 @@
 
 A sample basket component that will run as a federated module.
 
-* CDN_LOCATION: `seemly-temper.surge.sh`
+* CDN_LOCATION: `unused-example.surge.sh`
 * FRAMEWORK: `react@18.2`
 * COMPONENT: `Basket`
 

@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "config": {
-    "cdn": "seemly-temper.surge.sh"
+    "cdn": "unused-example.surge.sh"
   },
   "dependencies": {
     "react": "^18.2.0",
