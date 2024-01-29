@@ -60,6 +60,14 @@ This basket component will use Custom Events to interact with other federated mo
 
 <br/>
 
+> * Event name: `goToCheckout`
+> * Direction: dispatch
+> * Type: `boolean`
+> * Produces: `event.detail: { checkoutIntent: true }`
+> * Action: Emits an event when the purchase button is clicked
+
+<br/>
+
 ---
 
 <br/>

@@ -2,10 +2,12 @@ const BasketTotal = ({
   productCost,
   deliveryCost,
   discount,
+  onButtonClick,
 }: {
   productCost: number;
   deliveryCost: number;
   discount?: number;
+  onButtonClick: () => void;
 }) => {
   const subTotal = productCost + deliveryCost;
   const discountAmount = discount ? productCost * discount : 0;
@@ -42,7 +44,10 @@ const BasketTotal = ({
           <p className='mb-1 text-lg font-bold'>£{basketTotal.toFixed(2)}</p>
         </div>
       </div>
-      <button className='mt-6 w-full rounded-md bg-purple-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600'>
+      <button
+        className='mt-6 w-full rounded-md bg-purple-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600'
+        onClick={onButtonClick}
+      >
         Purchase
       </button>
     </div>

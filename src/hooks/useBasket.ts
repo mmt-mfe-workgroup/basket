@@ -5,41 +5,26 @@ const useBasket = () => {
   const [basketItems, setBasketItems] = useState<BasketItem[]>([]);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [deliveryCost, setDeliveryCost] = useState<number>(0);
-  const [discountAmount, setDiscountAmount] = useState<number>(0);
+  const [discountAmount, setDiscountAmount] = useState<number>();
 
   /**
-   * Recalculates the subtotal when the basket items change
-   */
-  useEffect(() => {
-    if (!basketItems) return;
-    const total = basketItems.reduce((acc, product) => {
-      return acc + product.price * product.quantity;
-    }, 0);
-    setSubTotal(total);
-  }, [basketItems]);
-
-  /**
-   * When the page loads we want to setup the event listeners
-   * and set the shipping cost
-   */
-  useEffect(() => {
-    window.addEventListener('addToBasket', addProductToBasket as EventListener);
-    window.addEventListener('applyVoucher', applyVoucherDiscount as EventListener);
-    setDeliveryCost(5.99);
-
-    return () => {
-      window.removeEventListener('addToBasket', addProductToBasket as EventListener);
-      window.removeEventListener('applyVoucher', applyVoucherDiscount as EventListener);
-    };
-  }, []);
-
-  /**
+   * @private
    * Create and dispatch a custom event to update the basket count
    */
   const emitEventBasketCount = (count: number) => {
     const event = new CustomEvent('basketItemCount', { detail: { basketItemCount: count } });
     window.dispatchEvent(event);
     console.log(`Basket count: ${count}`);
+  };
+
+  /**
+   * @private
+   * Create and dispatch a custom event to go to checkout
+   */
+  const emitEventGoCheckout = () => {
+    const event = new CustomEvent('goToCheckout', { detail: { checkoutIntent: true } });
+    window.dispatchEvent(event);
+    console.log(`User wants to go to checkout`);
   };
 
   /**
@@ -97,7 +82,6 @@ const useBasket = () => {
     console.log(`Basket items: ${JSON.stringify(updatedBasket)}`);
     emitEventBasketCount(updatedBasket.length);
   };
-
   /**
    * Applies a discount in percent to the basket total based on the voucher code
    */
@@ -106,7 +90,48 @@ const useBasket = () => {
     setDiscountAmount(event.detail.discountAmount);
   };
 
-  return { basketItems, subTotal, deliveryCost, discountAmount, updateQuantity };
+  /**
+   * Event handler for the purchase button in the basket
+   */
+  const handlePurchaseButton = () => {
+    if (!basketItems) return;
+    emitEventGoCheckout();
+  };
+
+  /**
+   * Recalculates the subtotal when the basket items change
+   */
+  useEffect(() => {
+    if (!basketItems) return;
+    const total = basketItems.reduce((acc, product) => {
+      return acc + product.price * product.quantity;
+    }, 0);
+    setSubTotal(total);
+  }, [basketItems]);
+
+  /**
+   * When the page loads we want to setup the event listeners
+   * and set the shipping cost
+   */
+  useEffect(() => {
+    window.addEventListener('addToBasket', addProductToBasket as EventListener);
+    window.addEventListener('applyVoucher', applyVoucherDiscount as EventListener);
+    setDeliveryCost(5.99);
+
+    return () => {
+      window.removeEventListener('addToBasket', addProductToBasket as EventListener);
+      window.removeEventListener('applyVoucher', applyVoucherDiscount as EventListener);
+    };
+  }, []);
+
+  return {
+    basketItems,
+    subTotal,
+    deliveryCost,
+    discountAmount,
+    updateQuantity,
+    handlePurchaseButton,
+  };
 };
 
 export default useBasket;
