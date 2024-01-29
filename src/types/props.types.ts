@@ -20,3 +20,9 @@ export interface BasketEvent extends Event {
     product: BasketItem;
   };
 }
+
+export interface VoucherEvent extends Event {
+  detail: {
+    discountAmount: number;
+  };
+}

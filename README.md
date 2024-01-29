@@ -6,7 +6,7 @@ A sample basket component that will run as a federated module.
 * FRAMEWORK: `react@18.2`
 * COMPONENT: `Basket`
 
-## Usage
+## Setup
 
 Update the **federated plugin** config found in your `vite.config.js` to include:
 
@@ -31,5 +31,37 @@ const App = () => {
   )
 }
 ```
+
+## Usage
+
+This basket component will use Custom Events to interact with other federated modules and has the following interface:
+
+> * Event name: `addToBasket`
+> * Direction: listen
+> * Type: `Product`
+> * Expects: `event.detail.product`
+> * Action: Listens for items to add from the catalouge to the basket
+
+<br/>
+
+> * Event name: `basketItemCount`
+> * Direction: dispatch
+> * Type: `number`
+> * Produces: `event.detail: { basketItemCount: 5 }`
+> * Action: Emits a value representing the current number of items in the basket
+
+<br/>
+
+> * Event name: `applyVoucher`
+> * Direction: listen
+> * Type: `number`
+> * Produces: `event.detail: { discountAmount: 0.5 }`
+> * Action: Listens for an event that sends in the discount amount in percentage
+
+<br/>
+
+---
+
+<br/>
 
 ![alt text](https://github.com/h-gomez/mmt-mfe-basket/blob/master/mfe-image.png?raw=true)

@@ -3,13 +3,11 @@ import ItemList from './components/ItemList';
 import BasketTotal from './components/BasketTotal';
 import useBasket from './hooks/useBasket';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 const RemoteButton = lazy(() => import('UI/Button'));
 import './App.css';
 
 function App() {
-  const { updateQuantity, basketItems, deliveryCost, subTotal } = useBasket();
+  const { updateQuantity, basketItems, deliveryCost, subTotal, discountAmount } = useBasket();
 
   return (
     <>
@@ -29,7 +27,7 @@ function App() {
             </div>
           </div>
 
-          <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} />
+          <BasketTotal productCost={subTotal} deliveryCost={deliveryCost} discount={discountAmount} />
         </div>
       )}
     </>

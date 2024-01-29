@@ -38,6 +38,7 @@ const ItemList = ({ products, handleUpdateQuantity }: ItemListProps) => {
                         className='h-10 w-10 border bg-white text-center text-sm outline-none text-gray-700 font-bold'
                         type='number'
                         value={product.quantity}
+                        readOnly
                       />
                       <span
                         className='cursor-pointer rounded-r w-9 bg-gray-100 text-gray-900 py-2 px-3.5 duration-100 hover:bg-purple-500 hover:text-purple-50'
