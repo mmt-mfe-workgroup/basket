@@ -2,7 +2,8 @@
 
 A sample basket component that will run as a federated module.
 
-* CDN_LOCATION: `unused-example.surge.sh`
+* SURGE_CDN: `unused-example.surge.sh`
+* NETLIFY_CDN: `https://mmt-mfe-basket.netlify.app`
 * FRAMEWORK: `react@18.2`
 * COMPONENT: `Basket`
 
