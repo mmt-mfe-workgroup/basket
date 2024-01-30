@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Product, BasketItem, BasketEvent, VoucherEvent } from '../types/props.types';
+import { useEffect, useRef, useState } from 'react';
+import { BasketItem, BasketEvent, VoucherEvent } from '../types/props.types';
 
 const useBasket = () => {
   const [basketItems, setBasketItems] = useState<BasketItem[]>([]);
@@ -7,11 +7,15 @@ const useBasket = () => {
   const [deliveryCost, setDeliveryCost] = useState<number>(0);
   const [discountAmount, setDiscountAmount] = useState<number>();
 
+  const basketItemsRef = useRef<BasketItem[]>([]);
+  basketItemsRef.current = basketItems;
+
   /**
    * @private
    * Create and dispatch a custom event to update the basket count
    */
-  const emitEventBasketCount = (count: number) => {
+  const emitEventBasketCount = () => {
+    const count = getTotalBasketCount();
     const event = new CustomEvent('basketItemCount', { detail: { basketItemCount: count } });
     window.dispatchEvent(event);
     console.log(`Basket count: ${count}`);
@@ -28,39 +32,22 @@ const useBasket = () => {
   };
 
   /**
-   * Loops through the products and sorts them by quantity
-   */
-  const sortProductQuantity = (products: Product[]) => {
-    const basket: BasketItem[] = [];
-
-    products.forEach((product) => {
-      const item = basket.find((item) => item.id === product.id);
-      if (item) {
-        item.quantity += 1;
-      } else {
-        basket.push({ ...product, quantity: 1 });
-      }
-    });
-
-    return basket;
-  };
-
-  /**
    * Adds a product to the basket or if it already exists, updates the quantity
    */
   const addProductToBasket = (event: BasketEvent) => {
     if (!event.detail.product) return;
 
-    // If the product ID already exists in the basket, update the quantity
-    // otherwise add the product to the basket.
-    if (basketItems?.find((item) => item.id === event.detail.product.id)) {
+    const currentBasketItems = basketItemsRef.current;
+
+    if (currentBasketItems?.find((item) => item.id === event.detail.product.id)) {
       updateQuantity(event.detail.product.id, 1);
     } else {
+      const newProduct = { ...event.detail.product, quantity: 1 };
+
       setBasketItems((currentItems) => {
         const items = currentItems || [];
-        const newItems = [...items, event.detail.product];
-        const sortedBasket = sortProductQuantity(newItems);
-        return sortedBasket;
+        const newItems = [...items, newProduct];
+        return newItems;
       });
     }
   };
@@ -70,8 +57,8 @@ const useBasket = () => {
    * The quantity cannot be reduced below 0
    */
   const updateQuantity = (id: number, quantity: number) => {
-    if (!basketItems) return;
-    const updatedBasket = basketItems.map((item) => {
+    if (!basketItemsRef) return;
+    const updatedBasket = basketItemsRef.current.map((item) => {
       if (item.id === id) {
         const newQuantity = Math.max(item.quantity + quantity, 0);
         return { ...item, quantity: newQuantity };
@@ -79,9 +66,15 @@ const useBasket = () => {
       return item;
     });
     setBasketItems(updatedBasket);
-    console.log(`Basket items: ${JSON.stringify(updatedBasket)}`);
-    emitEventBasketCount(updatedBasket.length);
   };
+
+  const getTotalBasketCount = () => {
+    if (!basketItems) return 0;
+    return basketItems.reduce((acc, item) => {
+      return acc + item.quantity;
+    }, 0);
+  };
+
   /**
    * Applies a discount in percent to the basket total based on the voucher code
    */
@@ -107,6 +100,7 @@ const useBasket = () => {
       return acc + product.price * product.quantity;
     }, 0);
     setSubTotal(total);
+    emitEventBasketCount();
   }, [basketItems]);
 
   /**
@@ -114,8 +108,13 @@ const useBasket = () => {
    * and set the shipping cost
    */
   useEffect(() => {
-    window.addEventListener('addToBasket', addProductToBasket as EventListener);
-    window.addEventListener('applyVoucher', applyVoucherDiscount as EventListener);
+    const handleAddToBasket = (event: Event) => addProductToBasket(event as BasketEvent);
+    const handleApplyVoucher = (event: Event) => applyVoucherDiscount(event as VoucherEvent);
+
+    // Attach the event listeners
+    window.addEventListener('addToBasket', handleAddToBasket);
+    window.addEventListener('applyVoucher', handleApplyVoucher);
+
     setDeliveryCost(5.99);
 
     return () => {
