@@ -21,12 +21,12 @@ const ItemList = ({ products, handleUpdateQuantity }: ItemListProps) => {
                 <img
                   src={product.thumbnail}
                   alt='product-image'
-                  className='w-full rounded-lg sm:w-40'
+                  className='w-44 rounded-lg object-cover'
                 />
                 <div className='ml-4 flex w-full justify-between text-left'>
                   <div className='mt-2 mt-0'>
                     <h3 className='text-lg font-bold text-gray-900'>{product.title}</h3>
-                    <p className='mt-1 text-xs text-gray-700'>Size: {product.size}</p>
+                    <p className='mt-1 text-xs text-gray-700'>Brand: {product.brand}</p>
                     <div className='flex items-center border-gray-100 mt-2'>
                       <span
                         className='cursor-pointer rounded-l w-9 bg-gray-100 text-gray-900 py-2 px-3.5 duration-100 hover:bg-purple-500 hover:text-purple-50 text-center'
