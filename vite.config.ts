@@ -11,7 +11,7 @@ const fed = () =>
       './App': './src/RemoteApp',
     },
     remotes: {
-      UI: 'https://rude-clouds.surge.sh/assets/remoteEntry.js',
+      UI: 'https://useless-distribution.surge.sh/assets/remoteEntry.js',
     },
     shared: ['react', 'react-dom'],
   });
