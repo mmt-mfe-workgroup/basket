@@ -86,7 +86,7 @@ const useBasket = () => {
   const applyVoucherDiscount = (event: VoucherEvent) => {
     if (event.detail?.discountAmount) {
       setDiscountAmount(event.detail.discountAmount);
-    } else if (event.type === 'clearBasket') {
+    } else if (event.type === 'addVoucher') {
       setDiscountAmount(0.25); // hard coded for now
     }
   };
