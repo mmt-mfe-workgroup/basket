@@ -51,6 +51,7 @@ const ItemList = ({ products, handleUpdateQuantity }: ItemListProps) => {
                 </div>
                 <div className='mt-2'>
                   <p className='text-gray-900 text-md font-bold'>£{product.price}</p>
+                  <p className='text-gray-500 text-sm italic'>£{product.price * product.quantity}</p>
                 </div>
               </div>
             ))}

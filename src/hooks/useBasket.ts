@@ -53,8 +53,7 @@ const useBasket = () => {
   };
 
   /**
-   * Updates the quantity of a given product in the basket
-   * The quantity cannot be reduced below 0
+   * Updates the quantity of a given product in the basket. if the quantity is 0, the product is removed
    */
   const updateQuantity = (id: number, quantity: number) => {
     if (!basketItemsRef) return;
@@ -65,9 +64,15 @@ const useBasket = () => {
       }
       return item;
     });
-    setBasketItems(updatedBasket);
+
+    // Remove any items that have quantity of zero
+    const filteredBasket = updatedBasket.filter((item) => item.quantity > 0);
+    setBasketItems(filteredBasket);
   };
 
+  /**
+   * Get the total number of items in the basket across all products
+   */
   const getTotalBasketCount = () => {
     if (!basketItems) return 0;
     return basketItems.reduce((acc, item) => {
@@ -79,8 +84,11 @@ const useBasket = () => {
    * Applies a discount in percent to the basket total based on the voucher code
    */
   const applyVoucherDiscount = (event: VoucherEvent) => {
-    if (!event.detail.discountAmount) return;
-    setDiscountAmount(event.detail.discountAmount);
+    if (event.detail?.discountAmount) {
+      setDiscountAmount(event.detail.discountAmount);
+    } else if (event.type === 'clearBasket') {
+      setDiscountAmount(0.25); // hard coded for now
+    }
   };
 
   /**
@@ -89,6 +97,13 @@ const useBasket = () => {
   const handlePurchaseButton = () => {
     if (!basketItems) return;
     emitEventGoCheckout();
+  };
+
+  /**
+   * Clears all items from the basket
+   */
+  const clearBasket = () => {
+    setBasketItems([]);
   };
 
   /**
@@ -110,10 +125,12 @@ const useBasket = () => {
   useEffect(() => {
     const handleAddToBasket = (event: Event) => addProductToBasket(event as BasketEvent);
     const handleApplyVoucher = (event: Event) => applyVoucherDiscount(event as VoucherEvent);
+    const handleClearBasket = () => clearBasket();
 
     // Attach the event listeners
     window.addEventListener('addToBasket', handleAddToBasket);
     window.addEventListener('applyVoucher', handleApplyVoucher);
+    window.addEventListener('clearBasket', handleClearBasket);
 
     setDeliveryCost(5.99);
 
