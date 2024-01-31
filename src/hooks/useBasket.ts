@@ -129,14 +129,14 @@ const useBasket = () => {
 
     // Attach the event listeners
     window.addEventListener('addToBasket', handleAddToBasket);
-    window.addEventListener('applyVoucher', handleApplyVoucher);
+    window.addEventListener('addVoucher', handleApplyVoucher);
     window.addEventListener('clearBasket', handleClearBasket);
 
     setDeliveryCost(5.99);
 
     return () => {
       window.removeEventListener('addToBasket', addProductToBasket as EventListener);
-      window.removeEventListener('applyVoucher', applyVoucherDiscount as EventListener);
+      window.removeEventListener('addVoucher', applyVoucherDiscount as EventListener);
     };
   }, []);
 
