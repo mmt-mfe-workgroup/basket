@@ -23,6 +23,6 @@ export interface BasketEvent extends Event {
 
 export interface VoucherEvent extends Event {
   detail: {
-    discountAmount: number;
+    voucherCode: string;
   };
 }

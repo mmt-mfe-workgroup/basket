@@ -1,0 +1,7 @@
+export const PROMO_CODES = {
+  MONDAY30: 0.3,
+  TUESDAY25: 0.25,
+  WEDNESDAY50: 0.5,
+  THURSDAY15: 0.15,
+  FRIDAY10: 0.1,
+};

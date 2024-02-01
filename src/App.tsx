@@ -13,6 +13,7 @@ function App() {
     deliveryCost,
     subTotal,
     discountAmount,
+    voucherCode,
   } = useBasket();
 
   return (
@@ -28,6 +29,7 @@ function App() {
             productCost={subTotal}
             deliveryCost={deliveryCost}
             discount={discountAmount}
+            voucherCode={voucherCode}
             onButtonClick={handlePurchaseButton}
           />
         </div>

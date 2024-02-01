@@ -2,11 +2,13 @@ const BasketTotal = ({
   productCost,
   deliveryCost,
   discount,
+  voucherCode,
   onButtonClick,
 }: {
   productCost: number;
   deliveryCost: number;
   discount?: number;
+  voucherCode?: string;
   onButtonClick: () => void;
 }) => {
   const subTotal = productCost + deliveryCost;
@@ -21,9 +23,9 @@ const BasketTotal = ({
         <p className='text-gray-700'>£{productCost}</p>
       </div>
 
-      {discount && (
+      {voucherCode && (
         <div className='mb-2 flex justify-between'>
-          <p className='text-gray-700'>Discount</p>
+          <p className='text-gray-700'>Discount - <span className="text-sm italic">{voucherCode}</span></p>
           <p className='text-red-600'>- £{discountAmount}</p>
         </div>
       )}

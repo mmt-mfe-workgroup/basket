@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { BasketItem, BasketEvent, VoucherEvent } from '../types/props.types';
+import { PROMO_CODES } from '../constants/promoCodes';
 
 const useBasket = () => {
   const [basketItems, setBasketItems] = useState<BasketItem[]>([]);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [deliveryCost, setDeliveryCost] = useState<number>(0);
   const [discountAmount, setDiscountAmount] = useState<number>();
+  const [voucherCode, setVoucherCode] = useState<string>();
 
   const basketItemsRef = useRef<BasketItem[]>([]);
   basketItemsRef.current = basketItems;
@@ -84,8 +86,19 @@ const useBasket = () => {
    * Applies a discount in percent to the basket total based on the voucher code
    */
   const applyVoucherDiscount = (event: VoucherEvent) => {
-    if (event.detail?.discountAmount) {
-      setDiscountAmount(event.detail.discountAmount);
+    if (event.detail?.voucherCode) {
+      const code = event.detail.voucherCode.toUpperCase();
+      const discount = PROMO_CODES[code as keyof typeof PROMO_CODES];
+
+      if (!discount) {
+        setDiscountAmount(0);
+        setVoucherCode('Invalid code');
+        console.warn(`Invalid voucher code: ${code}`);
+        return;
+      }
+
+      setDiscountAmount(discount);
+      setVoucherCode(code);
     } else if (event.type === 'addVoucher') {
       setDiscountAmount(0.25); // hard coded for now
     }
@@ -145,9 +158,12 @@ const useBasket = () => {
     subTotal,
     deliveryCost,
     discountAmount,
+    voucherCode,
     updateQuantity,
     handlePurchaseButton,
   };
 };
 
 export default useBasket;
+
+
