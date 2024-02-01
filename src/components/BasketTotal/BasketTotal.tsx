@@ -14,6 +14,10 @@ const BasketTotal = ({
   const subTotal = productCost + deliveryCost;
   const discountAmount = discount ? productCost * discount : 0;
   const basketTotal = discount ? subTotal - discountAmount : subTotal;
+  const purchaseEnabled = productCost > 0;
+  const buttonClass = purchaseEnabled
+    ? 'bg-purple-500 hover:bg-purple-600'
+    : 'bg-gray-300 cursor-not-allowed';
 
   return (
     <div className='mt-6 h-full'>
@@ -25,7 +29,9 @@ const BasketTotal = ({
 
       {voucherCode && (
         <div className='mb-2 flex justify-between'>
-          <p className='text-gray-700'>Discount - <span className="text-sm italic">{voucherCode}</span></p>
+          <p className='text-gray-700'>
+            Discount - <span className='text-sm italic'>{voucherCode}</span>
+          </p>
           <p className='text-red-600'>- £{discountAmount}</p>
         </div>
       )}
@@ -47,10 +53,11 @@ const BasketTotal = ({
         </div>
       </div>
       <button
-        className='mt-6 w-full rounded-md bg-purple-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600'
+        disabled={!purchaseEnabled}
+        className={`mt-6 w-full rounded-md py-1.5 font-medium ${buttonClass} text-purple-50`}
         onClick={onButtonClick}
       >
-        Purchase
+        {purchaseEnabled ? 'Purchase' : 'Add items to basket'}
       </button>
     </div>
   );
