@@ -53,10 +53,10 @@ This basket component will use Custom Events to interact with other federated mo
 
 <br/>
 
-> * Event name: `applyVoucher`
+> * Event name: `addVoucher`
 > * Direction: listen
-> * Type: `number`
-> * Produces: `event.detail: { discountAmount: 0.5 }`
+> * Type: `string`
+> * Produces: `event.detail: { voucherCode: 'MONDAY30' }`
 > * Action: Listens for an event that sends in the discount amount in percentage
 
 <br/>
@@ -66,6 +66,20 @@ This basket component will use Custom Events to interact with other federated mo
 > * Type: `boolean`
 > * Produces: `event.detail: { checkoutIntent: true }`
 > * Action: Emits an event when the purchase button is clicked
+
+<br/>
+
+## Promo Codes
+
+```javascript
+export const PROMO_CODES = {
+  MONDAY30: 0.3,
+  TUESDAY25: 0.25,
+  WEDNESDAY50: 0.5,
+  THURSDAY15: 0.15,
+  FRIDAY10: 0.1,
+};
+```
 
 <br/>
 
