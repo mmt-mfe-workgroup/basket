@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BasketItem, BasketEvent, VoucherEvent } from '../types/props.types';
+import { BasketItem, BasketEvent, VoucherEvent, StorageEvent } from '../types/props.types';
 import { PROMO_CODES } from '../constants/promoCodes';
 
 const useBasket = () => {
@@ -122,7 +122,7 @@ const useBasket = () => {
   /**
    * Sync's basket items from shared MFE module
    */
-  const syncStorage = ({ detail }: CustomEvent) => {
+  const syncStorage = ({ detail }: StorageEvent) => {
     detail.storage.basket.forEach((product: any) => addProductToBasket({ detail: product } as BasketEvent))
   }
 
@@ -145,7 +145,7 @@ const useBasket = () => {
   useEffect(() => {
     const handleAddToBasket = (event: Event) => addProductToBasket(event as BasketEvent);
     const handleApplyVoucher = (event: Event) => applyVoucherDiscount(event as VoucherEvent);
-    const handleRefresh = (event: Event) => syncStorage(event as never);
+    const handleRefresh = (event: Event) => syncStorage(event as StorageEvent);
     const handleClearBasket = () => clearBasket();
 
     // Attach the event listeners
