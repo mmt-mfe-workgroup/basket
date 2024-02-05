@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { BasketItem, BasketEvent, VoucherEvent } from '../types/props.types';
+import { BasketItem, BasketEvent, VoucherEvent, StorageEvent } from '../types/props.types';
 import { PROMO_CODES } from '../constants/promoCodes';
 
 const useBasket = () => {
@@ -120,6 +120,13 @@ const useBasket = () => {
   };
 
   /**
+   * Sync's basket items from shared MFE module
+   */
+  const syncStorage = ({ detail }: StorageEvent) => {
+    detail.storage.basket.forEach((product: any) => addProductToBasket({ detail: product } as BasketEvent))
+  }
+
+  /**
    * Recalculates the subtotal when the basket items change
    */
   useEffect(() => {
@@ -138,18 +145,21 @@ const useBasket = () => {
   useEffect(() => {
     const handleAddToBasket = (event: Event) => addProductToBasket(event as BasketEvent);
     const handleApplyVoucher = (event: Event) => applyVoucherDiscount(event as VoucherEvent);
+    const handleRefresh = (event: Event) => syncStorage(event as StorageEvent);
     const handleClearBasket = () => clearBasket();
 
     // Attach the event listeners
     window.addEventListener('addToBasket', handleAddToBasket);
     window.addEventListener('addVoucher', handleApplyVoucher);
     window.addEventListener('clearBasket', handleClearBasket);
-
+    window.addEventListener('MFE_SYNC', handleRefresh)
+    
     setDeliveryCost(5.99);
-
+    
     return () => {
       window.removeEventListener('addToBasket', addProductToBasket as EventListener);
       window.removeEventListener('addVoucher', applyVoucherDiscount as EventListener);
+      window.removeEventListener('MFE_SYNC', handleRefresh)
     };
   }, []);
 
